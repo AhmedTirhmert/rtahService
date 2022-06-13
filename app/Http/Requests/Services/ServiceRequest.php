@@ -37,8 +37,8 @@ class ServiceRequest extends FormRequest
     public function createRules(): array
     {
         return [
-            'product_id' => 'required|integer|exists:products,id',
-            'user_id' => 'required|integer|exists:users,id',
+            'id' => 'required|integer|exists:products,id',
+            // 'user_id' => 'required|integer|exists:users,id',
             'experience' => 'required|numeric',
             // 'tags' => 'required|array',
             // 'photo' => 'sometimes|files',

@@ -52,22 +52,63 @@
       </router-link>
     </li>
     @else
-    <li class="nav-item">
-      <router-link to="/user/services" class="nav-link">
-        <i class="nav-icon fas fa-list orange"></i>
-        <p>
-          My Services
-        </p>
-      </router-link>
-    </li>
-    <li class="nav-item">
-      <router-link to="/services" class="nav-link">
-        <i class="nav-icon fas fa-list orange"></i>
+    <li class="nav-item has-treeview">
+      <a href="#" class="nav-link">
+        <i class="nav-icon fas fa-cog green"></i>
         <p>
           Services
+          <i class="right fas fa-angle-left"></i>
         </p>
-      </router-link>
+      </a>
+      <ul class="nav nav-treeview">
+        <li class="nav-item">
+          <router-link to="/user/services" class="nav-link">
+            <i class="nav-icon fas fa-user green"></i>
+            
+            <p>
+              My Services
+            </p>
+          </router-link>
+        </li>
+        <li class="nav-item">
+          <router-link to="/services" class="nav-link">
+            <i class="nav-icon fas fa-users orange"></i>
+            <p>
+              Services
+            </p>
+          </router-link>
+        </li>
+      </ul>
     </li>
+    <li class="nav-item has-treeview">
+      <a href="#" class="nav-link">
+        <i class="nav-icon fas fa-bullhorn gray"></i>
+        <p>
+          Requests
+          <i class="right fas fa-angle-left"></i>
+        </p>
+      </a>
+      <ul class="nav nav-treeview">
+        <li class="nav-item">
+          <router-link to="/requests/sent" class="nav-link">
+            <i class="nav-icon fas fa-paper-plane orange"></i>
+            <p>
+              Sent
+            </p>
+          </router-link>
+        </li>
+        <li class="nav-item">
+          <router-link to="/requests/recieved" class="nav-link">
+            <i class="nav-icon fas fa-inbox green"></i>
+            <p>
+              Recieved
+            </p>
+          </router-link>
+        </li>
+      </ul>
+    </li>
+    
+
 
     @endif
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Services;
+namespace App\Http\Requests\ServiceRequests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -38,9 +38,9 @@ class ServiceRequestRequest extends FormRequest
     {
         return [
             'service_id' => 'required|numeric|exists:services,id',
-            'user_id' => 'required|numeric|exists:users,id',
-            'pending' => 'required|boolean',
-            'accepted' => 'required|boolean',
+            // 'user_id' => 'required|numeric|exists:users,id',
+            // 'pending' => 'required|boolean',
+            // 'accepted' => 'required|boolean',
             // 'tags' => 'required|array',
             // 'photo' => 'sometimes|files',
         ];
@@ -54,8 +54,9 @@ class ServiceRequestRequest extends FormRequest
     public function updateRules(): array
     {
         return [
-            'id' => 'required|integer|exists:products,id',
-            'experience' => 'required|numeric',
+            'request_id' => 'required|integer|exists:service_requests,id',
+            'accepted' => 'required|boolean',
+            'pending' => 'required|boolean',
             // 'tags' => 'required|array',
             // 'photo' => 'sometimes|files',
         ];

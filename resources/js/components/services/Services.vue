@@ -23,8 +23,6 @@
                             <table class="table table-hover">
                                 <thead>
                                     <tr>
-                                        <th>User</th>
-                                        <th>Email</th>
                                         <th>Name</th>
                                         <th>Description</th>
                                         <th>Category</th>
@@ -38,8 +36,6 @@
                                         v-for="service in services.data"
                                         :key="service.id"
                                     >
-                                        <td>{{ service.user.name }}</td>
-                                        <td>{{ service.user.email }}</td>
                                         <td>{{ service.product.name }}</td>
                                         <td>
                                             {{
@@ -65,11 +61,11 @@
                                             <a
                                                 v-else
                                                 href="#"
-                                                @click="
-                                                    requestService(service)
-                                                "
+                                                @click="requestService(service)"
                                             >
-                                                <i class="fas fa-cart-plus green"></i>
+                                                <i
+                                                    class="fas fa-cart-plus green"
+                                                ></i>
                                             </a>
                                         </td>
                                     </tr>
@@ -409,6 +405,10 @@ export default {
             });
         },
         requestService(service) {
+            let requestServiceForm = new Form({
+                service_id: service.id,
+            });
+
             Swal.fire({
                 title: "Request a Service!",
                 html: `Request <b>${service.product.name}</b> <br>from <b>${service.user.name}</b> <small>(${service.years}Y of experience)</small> <br>for </b>${service.product.price}<i> &#36;</i></b>`,
@@ -419,7 +419,7 @@ export default {
             }).then((result) => {
                 // Send request to the server
                 if (result.value) {
-                    this.form
+                    requestServiceForm
                         .post("/api/serviceRequest")
                         .then(() => {
                             Swal.fire(

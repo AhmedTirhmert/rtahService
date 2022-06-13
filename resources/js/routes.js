@@ -4,6 +4,8 @@ export default [
     { path: '/developer', component: require('./components/Developer.vue').default },
     { path: '/users', component: require('./components/Users.vue').default },
     { path: '/services', component: require('./components/services/Services.vue').default },
+    { path: '/requests/sent', component: require('./components/requests/Sent.vue').default },
+    { path: '/requests/recieved', component: require('./components/requests/Recieved.vue').default },
     { path: '/admin/services', component: require('./components/services/Services.vue').default },
     { path: '/user/services', component: require('./components/services/UserServices.vue').default },
     { path: '/products', component: require('./components/product/Products.vue').default },

@@ -32,6 +32,10 @@ Route::namespace('App\\Http\\Controllers\\API\V1')->group(function () {
     Route::post('change-password', 'ProfileController@changePassword');
     Route::get('tag/list', 'TagController@list');
     Route::get('service/list', 'ServiceController@list');
+    Route::get('service-request/recieved', 'ServiceRequestController@recieved');
+    Route::get('service-request/recieved/rejected', 'ServiceRequestController@rejected');
+    Route::get('service-request/recieved/approved', 'ServiceRequestController@approved');
+    Route::get('service-request/sent', 'ServiceRequestController@sent');
     Route::get('category/list', 'CategoryController@list');
     Route::post('product/upload', 'ProductController@upload');
 

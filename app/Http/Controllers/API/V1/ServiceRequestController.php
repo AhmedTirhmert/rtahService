@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\API\V1;
 
+use App\Http\Requests\ServiceRequests\ServiceRequestRequest;
 use App\Models\ServiceRequest;
-use App\Http\Requests\StoreServiceRequestRequest;
-use App\Http\Requests\UpdateServiceRequestRequest;
+use Illuminate\Support\Facades\Auth;
 
 class ServiceRequestController extends BaseController
 {
@@ -30,9 +30,61 @@ class ServiceRequestController extends BaseController
      */
     public function index()
     {
-        //
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function recieved()
+    {
+
+        $servicRrequests = $this->ServiceRequest->whereHas('service', function ($innerQuery) {
+            $innerQuery->where('services.user_id', Auth::user()->id);
+        })->where('pending', true)->with('service', 'client', 'service.product', 'service.product.category')->paginate(10);
+
+        return $this->sendResponse($servicRrequests, 'Recieved requests list');
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function sent()
+    {
+
+        $servicRrequests = $this->ServiceRequest->with('service', 'client', 'service.product', 'service.product.category')->where('user_id', Auth::user()->id)->where('pending', true)->paginate(10);
+
+        return $this->sendResponse($servicRrequests, 'Sent requests list');
     }
 
+     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function approved()
+    {
+        $servicRrequests = $this->ServiceRequest->whereHas('service', function ($innerQuery) {
+            $innerQuery->where('services.user_id', Auth::user()->id);
+        })->where('pending', false)->where('accepted', true)->with('service', 'client', 'service.product', 'service.product.category')->paginate(10);
+
+        return $this->sendResponse($servicRrequests, 'Approved recieved requests list');
+    }
+
+     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function rejected()
+    {
+        $servicRrequests = $this->ServiceRequest->whereHas('service', function ($innerQuery) {
+            $innerQuery->where('services.user_id', Auth::user()->id);
+        })->where('pending', false)->where('accepted', false)->with('service', 'client', 'service.product', 'service.product.category')->paginate(10);
+
+        return $this->sendResponse($servicRrequests, 'Approved recieved requests list');
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -49,9 +101,17 @@ class ServiceRequestController extends BaseController
      * @param  \App\Http\Requests\StoreServiceRequestRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreServiceRequestRequest $request)
+    public function store(ServiceRequestRequest $request)
     {
-        dd($request);
+
+        $servicRrequest = $this->ServiceRequest->create([
+            'service_id' => $request->get('service_id'),
+            'user_id' => Auth::user()->id,
+            'pending' => true,
+            'accepted' => false
+        ]);
+
+        return $this->sendResponse($servicRrequest, 'Service Request Sent Successfully');
     }
 
     /**
@@ -60,7 +120,7 @@ class ServiceRequestController extends BaseController
      * @param  \App\Models\ServiceRequest  $serviceRequest
      * @return \Illuminate\Http\Response
      */
-    public function show(ServiceRequest $serviceRequest)
+    public function show(ServiceRequestRequest $serviceRequest)
     {
         //
     }
@@ -71,9 +131,8 @@ class ServiceRequestController extends BaseController
      * @param  \App\Models\ServiceRequest  $serviceRequest
      * @return \Illuminate\Http\Response
      */
-    public function edit(ServiceRequest $serviceRequest)
+    public function edit(ServiceRequestRequest $serviceRequest)
     {
-        dd('dd');
     }
 
     /**
@@ -83,9 +142,16 @@ class ServiceRequestController extends BaseController
      * @param  \App\Models\ServiceRequest  $serviceRequest
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateServiceRequestRequest $request, ServiceRequest $serviceRequest)
+    public function update(ServiceRequestRequest $request,$id)
     {
-        //
+        $serviceRequest = $this->ServiceRequest->findOrFail($id);
+
+        $serviceRequest->update([
+            'pending' => $request->get('pending'),
+            'accepted' => $request->get('accepted'),
+        ]);
+
+        return $this->sendResponse($serviceRequest, '');
     }
 
     /**
@@ -94,7 +160,7 @@ class ServiceRequestController extends BaseController
      * @param  \App\Models\ServiceRequest  $serviceRequest
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ServiceRequest $serviceRequest)
+    public function destroy(ServiceRequestRequest $serviceRequest)
     {
         //
     }
