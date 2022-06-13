@@ -53,7 +53,7 @@ class ServiceRequestController extends BaseController
     public function sent()
     {
 
-        $servicRrequests = $this->ServiceRequest->with('service', 'client', 'service.product', 'service.product.category')->where('user_id', Auth::user()->id)->where('pending', true)->paginate(10);
+        $servicRrequests = $this->ServiceRequest->with('service', 'client', 'service.product','service.user', 'service.product.category')->where('user_id', Auth::user()->id)->where('pending', true)->paginate(10);
 
         return $this->sendResponse($servicRrequests, 'Sent requests list');
     }
@@ -63,7 +63,7 @@ class ServiceRequestController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function approved()
+    public function recievedAndApproved()
     {
         $servicRrequests = $this->ServiceRequest->whereHas('service', function ($innerQuery) {
             $innerQuery->where('services.user_id', Auth::user()->id);
@@ -77,13 +77,36 @@ class ServiceRequestController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function rejected()
+    public function recievedAndRejected()
     {
         $servicRrequests = $this->ServiceRequest->whereHas('service', function ($innerQuery) {
             $innerQuery->where('services.user_id', Auth::user()->id);
         })->where('pending', false)->where('accepted', false)->with('service', 'client', 'service.product', 'service.product.category')->paginate(10);
 
         return $this->sendResponse($servicRrequests, 'Approved recieved requests list');
+    }
+     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function sentAndApproved()
+    {
+        $servicRrequests = $this->ServiceRequest->with('service', 'client', 'service.product','service.user', 'service.product.category')->where('user_id', Auth::user()->id)->where('pending', false)->where('accepted', true)->paginate(10);
+
+        return $this->sendResponse($servicRrequests, 'Approved sent requests list');
+    }
+
+     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function sentAndRejected()
+    {
+        $servicRrequests = $this->ServiceRequest->with('service', 'client', 'service.product','service.user', 'service.product.category')->where('user_id', Auth::user()->id)->where('pending', false)->where('accepted', false)->paginate(10);
+
+        return $this->sendResponse($servicRrequests, 'Rejected sent requests list');
     }
     /**
      * Show the form for creating a new resource.
@@ -160,8 +183,13 @@ class ServiceRequestController extends BaseController
      * @param  \App\Models\ServiceRequest  $serviceRequest
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ServiceRequestRequest $serviceRequest)
+    public function destroy($id)
     {
-        //
+        $ServiceRequest = $this->ServiceRequest->findOrFail($id);
+        if (Auth::user()->isAdmin() || $ServiceRequest->with('client')->find($id)->client->id == Auth::user()->id) {
+            $ServiceRequest->delete();
+            return $this->sendResponse($ServiceRequest, 'Request has been Deleted');
+        }
+        return $this->sendResponse(false, 'Unauthorized');
     }
 }

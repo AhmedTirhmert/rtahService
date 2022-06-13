@@ -4,59 +4,57 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-require('./bootstrap');
+require("./bootstrap");
 
-window.Vue = require('vue');
-import moment from 'moment';
+window.Vue = require("vue");
+import moment from "moment";
 
-import { Form, HasError, AlertError } from 'vform';
+import { Form, HasError, AlertError } from "vform";
 window.Form = Form;
 
 import Gate from "./Gate";
 Vue.prototype.$gate = new Gate(window.user);
 
-import Swal from 'sweetalert2';
-
+import Swal from "sweetalert2";
 
 const Toast = Swal.mixin({
     toast: true,
-    position: 'top-end',
+    position: "top-end",
     showConfirmButton: false,
     timer: 3000,
     timerProgressBar: true,
     onOpen: (toast) => {
-      toast.addEventListener('mouseenter', Swal.stopTimer)
-      toast.addEventListener('mouseleave', Swal.resumeTimer)
-    }
-  })
+        toast.addEventListener("mouseenter", Swal.stopTimer);
+        toast.addEventListener("mouseleave", Swal.resumeTimer);
+    },
+});
 window.Swal = Swal;
 window.Toast = Toast;
 
-import VueProgressBar from 'vue-progressbar'
+import VueProgressBar from "vue-progressbar";
 Vue.use(VueProgressBar, {
-    color: 'rgb(143, 255, 199)',
-    failedColor: 'red',
-    height: '3px'
-  });
-
-Vue.component(HasError.name, HasError)
-Vue.component(AlertError.name, AlertError)
-
+    color: "rgb(143, 255, 199)",
+    failedColor: "red",
+    height: "3px",
+});
+import ToggleButton from "vue-js-toggle-button";
+Vue.use(ToggleButton);
+Vue.component(HasError.name, HasError);
+Vue.component(AlertError.name, AlertError);
 
 /**
  * Routes imports and assigning
  */
-import VueRouter from 'vue-router';
+import VueRouter from "vue-router";
 Vue.use(VueRouter);
-import routes from './routes';
-import Vue from 'vue';
+import routes from "./routes";
+import Vue from "vue";
 
 const router = new VueRouter({
-    mode: 'history',
-    routes
+    mode: "history",
+    routes,
 });
 // Routes End
-
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -64,44 +62,47 @@ const router = new VueRouter({
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
- 
 // Components
-Vue.component('pagination', require('laravel-vue-pagination'));
-Vue.component('dashboard', require('./components/Dashboard.vue'));
+Vue.component("pagination", require("laravel-vue-pagination"));
+Vue.component("dashboard", require("./components/Dashboard.vue"));
 
 Vue.component(
-    'passport-clients',
-    require('./components/passport/Clients.vue').default
+    "passport-clients",
+    require("./components/passport/Clients.vue").default
 );
 
 Vue.component(
-    'passport-authorized-clients',
-    require('./components/passport/AuthorizedClients.vue').default
+    "passport-authorized-clients",
+    require("./components/passport/AuthorizedClients.vue").default
 );
 
 Vue.component(
-    'passport-personal-access-tokens',
-    require('./components/passport/PersonalAccessTokens.vue').default
+    "passport-personal-access-tokens",
+    require("./components/passport/PersonalAccessTokens.vue").default
 );
 
-Vue.component(
-    'not-found',
-    require('./components/NotFound.vue').default
-);
+Vue.component("not-found", require("./components/NotFound.vue").default);
 
 // Filter Section
 
-Vue.filter('myDate',function(created){
-    return moment(created).format('MMMM Do YYYY');
+Vue.filter("myDate", function (created) {
+    return moment(created).format("MMMM Do YYYY");
 });
 
-Vue.filter('yesno', value => (value ? '<i class="fas fa-check green"></i>' : '<i class="fas fa-times red"></i>'));
+Vue.filter("yesno", (value) =>
+    value
+        ? '<i class="fas fa-check green"></i>'
+        : '<i class="fas fa-times red"></i>'
+);
 
 // end Filter
 
-Vue.component('example-component', require('./components/ExampleComponent.vue'));
+Vue.component(
+    "example-component",
+    require("./components/ExampleComponent.vue")
+);
 
 const app = new Vue({
-    el: '#app',
-    router
+    el: "#app",
+    router,
 });

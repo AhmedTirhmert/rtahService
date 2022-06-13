@@ -362,7 +362,8 @@ export default {
                             this.loadAcceptedServiceRequests();
                         })
                         .catch((data) => {
-                            Swal.fire("Failed!", data.message, "warning");
+                            Swal.fire("Failed!", 'Something went wrong!<br> Try again later.', "warning");
+                            this.loadServiceRequests();
                         });
                 }
             });

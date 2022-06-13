@@ -52,7 +52,7 @@ class ServiceController extends BaseController
         }
         return $this->sendResponse($Services, 'Service list');
     }
-    
+
     /**
      * Store a newly created resource in storage.
      *
@@ -108,14 +108,12 @@ class ServiceController extends BaseController
      */
     public function destroy($id)
     {
-        // dd($id);
-        $this->authorize('isAdmin');
-
-        $Service = $this->Service->findOrFail($id);
-
-        $Service->delete();
-
-        return $this->sendResponse($Service, 'Service has been Deleted');
+        if (Auth::user()->isAdmin() || $this->Service->with('user')->first()->user->id == Auth::user()->id) {
+            $Service = $this->Service->findOrFail($id);
+            $Service->delete();
+            return $this->sendResponse($Service, 'Service has been Deleted');
+        }
+        return $this->sendResponse(false, 'Unauthorized');
     }
 
     public function upload(Request $request)

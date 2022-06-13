@@ -53,7 +53,7 @@ class ServiceRequest extends FormRequest
     public function updateRules(): array
     {
         return [
-            'id' => 'required|integer|exists:services,id',
+            'service_id' => 'required|integer|exists:services,id',
             'experience' => 'required|numeric',
             // 'tags' => 'required|array',
             // 'photo' => 'sometimes|files',

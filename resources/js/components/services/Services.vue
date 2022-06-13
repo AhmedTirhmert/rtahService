@@ -23,7 +23,9 @@
                             <table class="table table-hover">
                                 <thead>
                                     <tr>
-                                        <th>Name</th>
+                                        <th>User</th>
+                                        <th v-show="$gate.isAdmin()">Email</th>
+                                        <th>Product</th>
                                         <th>Description</th>
                                         <th>Category</th>
                                         <th>Price</th>
@@ -36,6 +38,8 @@
                                         v-for="service in services.data"
                                         :key="service.id"
                                     >
+                                        <td>{{ service.user.name }}</td>
+                                        <td v-show="$gate.isAdmin()">{{ service.user.email }}</td>
                                         <td>{{ service.product.name }}</td>
                                         <td>
                                             {{
@@ -83,175 +87,6 @@
                     <!-- /.card -->
                 </div>
             </div>
-
-            <!-- Modal -->
-            <!-- <div
-                class="modal fade"
-                id="addNew"
-                tabindex="-1"
-                role="dialog"
-                aria-labelledby="addNew"
-                aria-hidden="true"
-            >
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" v-show="!editmode">
-                                Create New Service
-                            </h5>
-                            <h5 class="modal-title" v-show="editmode">
-                                Edit Service
-                            </h5>
-                            <button
-                                type="button"
-                                class="close"
-                                data-dismiss="modal"
-                                aria-label="Close"
-                            >
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-
-                        <form
-                            @submit.prevent="
-                                editmode ? updateService() : createService()
-                            "
-                        >
-                            <div class="modal-body">
-                                <div class="form-group">
-                                    <label>Product</label>
-                                    <select
-                                        aria-placeholder="Select a product"
-                                        class="form-control"
-                                        v-model="form.id"
-                                        id="products"
-                                        required
-                                        @change="setFields"
-                                    >
-                                        <option
-                                            value=""
-                                            disabled
-                                            selected
-                                            hidden
-                                        >
-                                            Choose a Product
-                                        </option>
-                                        <option
-                                            v-for="(
-                                                product, index
-                                            ) in products.data"
-                                            :key="index"
-                                            :value="product.id"
-                                        >
-                                            {{ product.name }}
-                                        </option>
-                                    </select>
-                                    <has-error
-                                        :form="form"
-                                        field="category_id"
-                                    ></has-error>
-                                </div>
-                                <div class="form-group">
-                                    <label>Name</label>
-                                    <input
-                                        readonly
-                                        v-model="form.name"
-                                        type="text"
-                                        name="name"
-                                        class="form-control"
-                                        :class="{
-                                            'is-invalid':
-                                                form.errors.has('name'),
-                                        }"
-                                    />
-                                </div>
-                                <div class="form-group">
-                                    <label>Category</label>
-                                    <input
-                                        readonly
-                                        v-model="form.category.name"
-                                        type="text"
-                                        name="name"
-                                        class="form-control"
-                                        :class="{
-                                            'is-invalid':
-                                                form.errors.has('name'),
-                                        }"
-                                    />
-                                </div>
-                                <div class="form-group">
-                                    <label>Description</label>
-                                    <textarea
-                                        readonly
-                                        v-model="form.description"
-                                        type="text"
-                                        name="description"
-                                        class="form-control"
-                                        :class="{
-                                            'is-invalid':
-                                                form.errors.has('description'),
-                                        }"
-                                    />
-                                </div>
-                                <div class="form-group">
-                                    <label>Price</label>
-                                    <input
-                                        readonly
-                                        v-model="form.price"
-                                        type="text"
-                                        name="price"
-                                        class="form-control"
-                                        :class="{
-                                            'is-invalid':
-                                                form.errors.has('price'),
-                                        }"
-                                    />
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Experience (years)</label>
-                                    <input
-                                        required
-                                        v-model="form.experience"
-                                        type="number"
-                                        name="experience"
-                                        class="form-control"
-                                        min="0"
-                                        step="0.1"
-                                        :class="{
-                                            'is-invalid':
-                                                form.errors.has('experience'),
-                                        }"
-                                    />
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button
-                                    type="button"
-                                    class="btn btn-secondary"
-                                    data-dismiss="modal"
-                                >
-                                    Close
-                                </button>
-                                <button
-                                    v-show="editmode"
-                                    type="submit"
-                                    class="btn btn-success"
-                                >
-                                    Update
-                                </button>
-                                <button
-                                    v-show="!editmode"
-                                    type="submit"
-                                    class="btn btn-primary"
-                                >
-                                    Create
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div> -->
         </div>
     </section>
 </template>

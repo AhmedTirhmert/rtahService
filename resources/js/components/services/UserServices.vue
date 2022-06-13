@@ -213,7 +213,7 @@
                                         type="number"
                                         name="experience"
                                         class="form-control"
-                                        min="0"
+                                        min="0.5"
                                         step="0.1"
                                         :class="{
                                             'is-invalid':
