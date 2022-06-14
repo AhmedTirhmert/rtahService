@@ -105,8 +105,8 @@
   {{-- /.content-wrapper --}}
 
   {{-- Main Footer --}}
-  <footer class="main-footer">
-  </footer>
+  <!-- <footer class="main-footer">
+  </footer> -->
 </div>
 {{-- ./wrapper --}}
 

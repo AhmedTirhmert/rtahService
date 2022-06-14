@@ -75,6 +75,7 @@
             <i class="nav-icon fas fa-users orange"></i>
             <p>
               Services
+              <span class="badge badge-info right">6</span>
             </p>
           </router-link>
         </li>
