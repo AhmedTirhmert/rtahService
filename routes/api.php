@@ -50,6 +50,7 @@ Route::namespace('App\\Http\\Controllers\\API\V1')->group(function () {
         'product' => 'ProductController',
         'service' => 'ServiceController',
         'serviceRequest' => 'ServiceRequestController',
+        'feedback' => 'FeedbackController',
         'category' => 'CategoryController',
         'tag' => 'TagController',
     ]);

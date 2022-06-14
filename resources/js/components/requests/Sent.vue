@@ -401,23 +401,6 @@
                                                     max="5"
                                                     step="0.5"
                                                 />
-                                                <!-- <toggle-button
-                                            :value="true"
-                                            :switch-color="{
-                                                checked: 'lightGreen',
-                                                unchecked: 'lightRed',
-                                            }"
-                                            :color="{
-                                                checked: 'green',
-                                                unchecked: 'red',
-                                            }"
-                                            :labels="{
-                                                checked: 'Good',
-                                                unchecked: 'Baad',
-                                            }"
-                                            :width="70"
-                                            :height="25"
-                                        /> -->
                                             </div>
                                         </div>
                                     </div>
@@ -479,6 +462,7 @@ export default {
                 },
                 rating: "",
                 message: "",
+                id:''
             }),
         };
     },
@@ -513,114 +497,31 @@ export default {
                 .then(({ data }) => (this.rejectedServiceRequests = data.data));
             this.$Progress.finish();
         },
-
-        acceptServiceRequest(request) {
-            let acceptServiceRequestForm = new Form({
-                request_id: request.id,
-                pending: false,
-                accepted: true,
-            });
-
-            Swal.fire({
-                title: "Accept Request!",
-                html: `Accept Request for Service <br><b>${request.service.product.name}</b> from <b>${request.client.name}</b> <br>for <b>${request.service.product.price}<i>&#36;</i></b>`,
-                showCancelButton: true,
-                confirmButtonColor: "#137547",
-                cancelButtonColor: "#3085d6",
-                confirmButtonText: "Yes, Accept it!",
-            }).then((result) => {
-                // Send request to the server
-                if (result.value) {
-                    acceptServiceRequestForm
-                        .put(
-                            `/api/serviceRequest/${acceptServiceRequestForm.request_id}`
-                        )
-                        .then(() => {
-                            Swal.fire(
-                                "Accepted!",
-                                `Contact client at <b>${request.client.email}</b>`,
-                                "success"
-                            );
-                            this.loadServiceRequests();
-                            this.loadAcceptedServiceRequests();
-                        })
-                        .catch((data) => {
-                            Swal.fire("Failed!", data.message, "warning");
-                        });
-                }
-            });
-        },
-        refuseServiceRequest(request) {
-            let acceptServiceRequestForm = new Form({
-                request_id: request.id,
-                pending: false,
-                accepted: false,
-            });
-
-            Swal.fire({
-                title: "Refuse Request!",
-                html: `Refuse Request for Service <br><b>${request.service.product.name}</b> from <b>${request.client.name}</b> <br>for <b>${request.service.product.price}<i>&#36;</i></b>`,
-                showCancelButton: true,
-                confirmButtonColor: "#d33",
-                cancelButtonColor: "#3085d6",
-                confirmButtonText: "Yes, Refuse it!",
-            }).then((result) => {
-                // Send request to the server
-                if (result.value) {
-                    acceptServiceRequestForm
-                        .put(
-                            `/api/serviceRequest/${acceptServiceRequestForm.request_id}`
-                        )
-                        .then(() => {
-                            Swal.fire(
-                                "Refused!",
-                                `Request refused successfully`,
-                                "success"
-                            );
-                            this.loadServiceRequests();
-                            this.loadRejectedServiceRequests();
-                        })
-                        .catch((data) => {
-                            Swal.fire("Failed!", data.message, "warning");
-                        });
-                }
-            });
-        },
         giveFeedback(request) {
             this.feedBackForm.fill(request);
+            console.log(this.feedBackForm);
             $("#feedbackModal").modal("show");
         },
-        cancelServiceRequest(request) {
-            let acceptServiceRequestForm = new Form({
-                request_id: request.id,
-            });
-
-            Swal.fire({
-                title: "Cancel Request!",
-                html: `Cancel Request for Service <br><b>${request.service.product.name}</b> from <b>${request.client.name}</b> <br>for <b>${request.service.product.price}<i>&#36;</i></b>`,
-                showCancelButton: true,
-                confirmButtonColor: "#e85d04",
-                cancelButtonColor: "#3085d6",
-                confirmButtonText: "Yes, Cancel it!",
-            }).then((result) => {
-                if (result.value) {
-                    acceptServiceRequestForm
-                        .delete(
-                            `/api/serviceRequest/${acceptServiceRequestForm.request_id}`
-                        )
-                        .then(() => {
-                            Swal.fire(
-                                "Canceled!",
-                                `Request canceled successfully`,
-                                "success"
-                            );
-                            this.loadServiceRequests();
-                        })
-                        .catch((data) => {
-                            Swal.fire("Failed!", data.message, "warning");
-                        });
-                }
-            });
+        submitFeedback() {
+            console.log(this.feedBackForm);
+            this.feedBackForm
+                .post(`/api/feedback`)
+                .then(() => {
+                    Swal.fire(
+                        "FeedBack Sent!",
+                        `FeedBack sent successfully`,
+                        "success"
+                    );
+                    $("#feedbackModal").modal("hide");
+                    this.loadServiceRequests();
+                })
+                .catch((error) => {
+                    Swal.fire(
+                        "Failed!",
+                        error.response.data.message,
+                        "warning"
+                    );
+                });
         },
     },
     mounted() {},

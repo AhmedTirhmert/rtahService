@@ -28,6 +28,8 @@
                                         <th>Category</th>
                                         <th>Price</th>
                                         <th>Experience</th>
+                                        <th>Average Rating</th>
+                                        <th>FeedBacks</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -37,7 +39,9 @@
                                         :key="service.id"
                                     >
                                         <td>{{ service.product.name }}</td>
-                                        <td :title=service.product.description>
+                                        <td
+                                            :title="service.product.description"
+                                        >
                                             {{
                                                 service.product.description
                                                     | truncate(30, "...")
@@ -48,6 +52,40 @@
                                         </td>
                                         <td>{{ service.product.price }}</td>
                                         <td>{{ service.years }}</td>
+                                        <td>
+                                            <star-rating
+                                                :star-size="20"
+                                                :animate="true"
+                                                read-only
+                                                :show-rating="false"
+                                                :increment="0.5"
+                                                :rating="
+                                                    service.feedback
+                                                        | AVG_FeedBack()
+                                                "
+                                                :active-color="
+                                                    service.feedback
+                                                        | FeedBackColor()
+                                                "
+                                            />
+                                            <small
+                                                >{{
+                                                    service.feedback.length
+                                                }}
+                                                reviews</small
+                                            >
+                                        </td>
+                                        <td>
+                                            <a
+                                                title="feedback"
+                                                href="#"
+                                                @click="feedBackModal(service)"
+                                            >
+                                                <i
+                                                    class="fa fa-comment-dots"
+                                                ></i>
+                                            </a>
+                                        </td>
                                         <td>
                                             <a
                                                 href="#"
@@ -249,13 +287,19 @@
                     </div>
                 </div>
             </div>
+            <feed-back-modal :service="feedBackService" />
         </div>
     </section>
 </template>
 
 <script>
+import StarRating from "vue-star-rating";
+import feedBackModal from "./feedbackModal.vue";
 export default {
-    components: {},
+    components: {
+        StarRating,
+        feedBackModal,
+    },
     data() {
         return {
             editmode: false,
@@ -271,9 +315,10 @@ export default {
                 price: "",
                 photoUrl: "",
                 experience: 0,
-                service_id:''
+                service_id: "",
             }),
             categories: [],
+            feedBackService: { product: { name: "" }, feedback: [] },
         };
     },
     methods: {
@@ -302,22 +347,30 @@ export default {
         loadServices() {
             axios
                 .get("/api/service/list")
-                .then(({ data }) => (this.services = data.data))
-                // .then(()=>this.services.data.forEach(elem => {
-                //     console.log(elem.id ,elem.product);
-                // }));
+                .then(({ data }) => (this.services = data.data));
+            // .then(()=>this.services.data.forEach(elem => {
+            //     console.log(elem.id ,elem.product);
+            // }));
         },
         editModal(service) {
             this.editmode = true;
             this.form.reset();
             $("#addNew").modal("show");
-            let selectedService = {...service.product,experience:service.years,service_id:service.id}
+            let selectedService = {
+                ...service.product,
+                experience: service.years,
+                service_id: service.id,
+            };
             this.form.fill(selectedService);
         },
         newModal() {
             this.editmode = false;
             this.form.reset();
             $("#addNew").modal("show");
+        },
+        feedBackModal(service) {
+            this.feedBackService = service;
+            $("#feedBackModal").modal("show");
         },
         createService() {
             this.$Progress.start();
@@ -411,6 +464,18 @@ export default {
     filters: {
         truncate: function (text, length, suffix) {
             return text.substring(0, length) + suffix;
+        },
+        AVG_FeedBack(feedback) {
+            let rating =
+                feedback.map((elem) => elem.rating).reduce((a, b) => a + b, 0) /
+                feedback.length;
+            return rating;
+        },
+        FeedBackColor(feedback) {
+            let rating =
+                feedback.map((elem) => elem.rating).reduce((a, b) => a + b, 0) /
+                feedback.length;
+            return rating > 3 ? "#02c39a" : "#ff3c38";
         },
     },
     computed: {

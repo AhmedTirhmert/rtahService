@@ -31,9 +31,9 @@ class ServiceController extends BaseController
     public function index()
     {
         if (Auth::user()->isAdmin()) {
-            $Services = $this->Service->with('user', 'product', 'product.category')->latest()->paginate(10);
+            $Services = $this->Service->with('user', 'product', 'feedback','feedback.user', 'product.category')->latest()->paginate(10);
         } else {
-            $Services = $this->Service->with('user', 'product', 'product.category')->where('user_id', '!=', Auth::user()->id)->latest()->paginate(10);
+            $Services = $this->Service->with('user', 'product', 'feedback','feedback.user', 'product.category')->where('user_id', '!=', Auth::user()->id)->latest()->paginate(10);
         }
         return $this->sendResponse($Services, 'Service list');
     }
@@ -46,9 +46,9 @@ class ServiceController extends BaseController
     public function list()
     {
         if (Auth::user()->isAdmin()) {
-            $Services = $this->Service->with('user', 'product', 'product.category')->latest()->paginate(10);
+            $Services = $this->Service->with('user', 'product', 'feedback' ,'feedback.user', 'product.category')->latest()->paginate(10);
         } else {
-            $Services = $this->Service->with('user', 'product', 'product.category')->where('user_id', Auth::user()->id)->latest()->paginate(10);
+            $Services = $this->Service->with('user', 'product', 'feedback' ,'feedback.user', 'product.category')->where('user_id', Auth::user()->id)->latest()->paginate(10);
         }
         return $this->sendResponse($Services, 'Service list');
     }

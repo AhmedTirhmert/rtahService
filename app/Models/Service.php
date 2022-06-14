@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Product;
 use App\Models\User;
+use App\Models\feedback;
 
 class Service extends Model
 {
@@ -26,4 +27,9 @@ class Service extends Model
     {
         return $this->belongsTo(Product::class);
     }
+    public function feedback()
+    {
+        return $this->hasMany(feedback::class);
+    }
+
 }

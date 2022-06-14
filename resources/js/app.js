@@ -37,8 +37,6 @@ Vue.use(VueProgressBar, {
     failedColor: "red",
     height: "3px",
 });
-import ToggleButton from "vue-js-toggle-button";
-Vue.use(ToggleButton);
 Vue.component(HasError.name, HasError);
 Vue.component(AlertError.name, AlertError);
 
