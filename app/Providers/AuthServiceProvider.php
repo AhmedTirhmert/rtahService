@@ -35,9 +35,8 @@ class AuthServiceProvider extends ServiceProvider
             // if ($user->isAdmin()) {
             //     return true;
             // }
-
             // for simplicity
-            return strtolower($user->type) === 'admin';
+            return strtolower($user->role->name) === 'admin';
         });
 
         Gate::define('isUser', function ($user) {
@@ -46,7 +45,16 @@ class AuthServiceProvider extends ServiceProvider
             // }
 
             // for simplicity
-            return strtolower($user->type) === 'user';
+            return strtolower($user->role->name) === 'client';
+        });
+
+        Gate::define('isFournisseur', function ($user) {
+            // if ($user->isUser()) {
+            //     return true;
+            // }
+
+            // for simplicity
+            return strtolower($user->role->name) === 'fournisseur';
         });
     }
 }

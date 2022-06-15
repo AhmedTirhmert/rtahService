@@ -61,7 +61,7 @@ class ServiceController extends BaseController
      */
     public function store(ServiceRequest $request)
     {
-
+        $this->authorize('isFournisseur');
         $Service = $this->Service->create([
             'user_id' => Auth::user()->id,
             'product_id' => $request->get('id'),

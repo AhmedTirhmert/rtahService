@@ -21,7 +21,7 @@ class User extends Authenticatable // implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'type'
+        'name', 'email', 'password', 'role_id'
     ];
 
     /**
@@ -54,7 +54,7 @@ class User extends Authenticatable // implements MustVerifyEmail
 
     public function role()
     {
-        return $this->belongsTo(Role::class,'type');
+        return $this->belongsTo(Role::class);
     }
     public function services()
     {
@@ -73,12 +73,12 @@ class User extends Authenticatable // implements MustVerifyEmail
 
     public function isAdmin()
     {
-        
-        return strtolower($this->type) === 'admin';
+        return $this->role()->where('name','admin')->exists();
     }
 
     public function isUser()
     {
-        return strtolower($this->type) === 'user';
+        return $this->role()->where('name','user')->exists();
+
     }
 }

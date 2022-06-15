@@ -80,11 +80,19 @@
                                             >
                                         </td>
                                         <td v-show="$gate.isAdmin()">
-                                            here goes FB
+                                            <a
+                                                title="feedback"
+                                                href="#"
+                                                @click="feedBackModal(service)"
+                                            >
+                                                <i
+                                                    class="fa fa-comment-dots"
+                                                ></i>
+                                            </a>
                                         </td>
                                         <td>
                                             <a
-                                                v-if="$gate.isAdmin()"
+                                                v-show="$gate.isAdmin()"
                                                 href="#"
                                                 @click="
                                                     deleteService(service.id)
@@ -93,7 +101,7 @@
                                                 <i class="fa fa-trash red"></i>
                                             </a>
                                             <a
-                                                v-else
+                                                v-show="$gate.isClient()"
                                                 href="#"
                                                 @click="requestService(service)"
                                             >
@@ -118,17 +126,17 @@
                 </div>
             </div>
         </div>
-        <!-- <feed-back-modal /> -->
+        <feed-back-modal :service="feedBackService"/>
     </section>
 </template>
 
 <script>
 import StarRating from "vue-star-rating";
-import feedBackModal from './feedbackModal.vue'
+import feedBackModal from "./feedbackModal.vue";
 export default {
     components: {
         StarRating,
-        feedBackModal
+        feedBackModal,
     },
     data() {
         return {
@@ -148,6 +156,7 @@ export default {
                 service_id: "",
             }),
             categories: [],
+            feedBackService: { product: { name: "" }, feedback: [] },
         };
     },
     methods: {
@@ -195,6 +204,10 @@ export default {
             this.editmode = false;
             this.form.reset();
             $("#addNew").modal("show");
+        },
+        feedBackModal(service) {
+            this.feedBackService = service;
+            $("#feedBackModal").modal("show");
         },
         createService() {
             this.$Progress.start();

@@ -7,7 +7,7 @@ export default [
     { path: '/requests/sent', component: require('./components/requests/Sent.vue').default },
     { path: '/requests/recieved', component: require('./components/requests/Recieved.vue').default },
     { path: '/admin/services', component: require('./components/services/Services.vue').default },
-    { path: '/user/services', component: require('./components/services/UserServices.vue').default },
+    { path: '/fournisseur/services', component: require('./components/services/UserServices.vue').default },
     { path: '/products', component: require('./components/product/Products.vue').default },
     { path: '/product/tag', component: require('./components/product/Tag.vue').default },
     { path: '/product/category', component: require('./components/product/Category.vue').default },

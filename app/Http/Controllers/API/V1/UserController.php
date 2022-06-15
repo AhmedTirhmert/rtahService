@@ -32,7 +32,7 @@ class UserController extends BaseController
         }
         // $this->authorize('isAdmin');
 
-        $users = User::latest()->paginate(10);
+        $users = User::with('role')->latest()->paginate(10);
 
         return $this->sendResponse($users, 'Users list');
     }
@@ -53,7 +53,7 @@ class UserController extends BaseController
             'name' => $request['name'],
             'email' => $request['email'],
             'password' => Hash::make($request['password']),
-            'type' => $request['type'],
+            'role_id' => $request['role_id'],
         ]);
 
         return $this->sendResponse($user, 'User Created Successfully');
@@ -89,7 +89,6 @@ class UserController extends BaseController
      */
     public function destroy($id)
     {
-
         $this->authorize('isAdmin');
 
         $user = User::findOrFail($id);

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Product;
 use App\Models\User;
 use App\Models\feedback;
-
+use App\Models\ServiceRequest;
 class Service extends Model
 {
     use HasFactory;
@@ -26,6 +26,10 @@ class Service extends Model
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+    public function request()
+    {
+        return $this->hasMany(ServiceRequest::class);
     }
     public function feedback()
     {

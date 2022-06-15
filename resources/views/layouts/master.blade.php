@@ -60,7 +60,7 @@
 
                   {{ Auth::user()->name }}
                   <span class="d-block text-muted">
-                    {{ Ucfirst(Auth::user()->type) }}
+                    {{ Ucfirst(Auth::user()->role->name) }}
                   </span>
               </div>
           </div>

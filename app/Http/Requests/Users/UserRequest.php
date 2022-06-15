@@ -38,10 +38,10 @@ class UserRequest extends FormRequest
     public function createRules(): array
     {
         return [
-            'type' => 'required|in:admin,user',
+            'role_id' => 'required|exists:roles,id',
             'name' => 'required|string|max:191',
             'email' => 'required|string|email|max:191|unique:users',
-            'password' => 'required|string|min:6'
+            'password' => 'required|string|min:8'
         ];
     }
 

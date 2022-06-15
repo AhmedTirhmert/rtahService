@@ -8,17 +8,13 @@
         </p>
       </router-link>
     </li>
-
-    @if(Auth::user()->isAdmin())
+    @can('isAdmin')
     <li class="nav-item">
       <router-link to="/users" class="nav-link">
         <i class="fa fa-users nav-icon blue"></i>
         <p>Users</p>
       </router-link>
     </li>
-    @endif
-
-    @if(Auth::user()->isAdmin())
     <li class="nav-item">
       <router-link to="/products" class="nav-link">
         <i class="nav-icon fas fa-list-ol green"></i>
@@ -51,73 +47,47 @@
         </p>
       </router-link>
     </li>
-    @else
-    <li class="nav-item has-treeview">
-      <a href="#" class="nav-link">
-        <i class="nav-icon fas fa-cog green"></i>
+    @endcan
+    @can('isUser')
+    <li class="nav-item">
+      <router-link to="/services" class="nav-link">
+        <i class="nav-icon fas fa-users green"></i>
         <p>
           Services
-          <i class="right fas fa-angle-left"></i>
+          <!-- <span class="badge badge-info right">6</span> -->
         </p>
-      </a>
-      <ul class="nav nav-treeview">
-        <li class="nav-item">
-          <router-link to="/user/services" class="nav-link">
-            <i class="nav-icon fas fa-user green"></i>
-            
-            <p>
-              My Services
-            </p>
-          </router-link>
-        </li>
-        <li class="nav-item">
-          <router-link to="/services" class="nav-link">
-            <i class="nav-icon fas fa-users orange"></i>
-            <p>
-              Services
-              <span class="badge badge-info right">6</span>
-            </p>
-          </router-link>
-        </li>
-      </ul>
+      </router-link>
     </li>
-    <li class="nav-item has-treeview">
-      <a href="#" class="nav-link">
-        <i class="nav-icon fas fa-bullhorn gray"></i>
+    <li class="nav-item">
+      <router-link to="/requests/sent" class="nav-link">
+        <i class="nav-icon fas fa-paper-plane orange"></i>
         <p>
-          Requests
-          <i class="right fas fa-angle-left"></i>
+          Sent Requests
         </p>
-      </a>
-      <ul class="nav nav-treeview">
-        <li class="nav-item">
-          <router-link to="/requests/sent" class="nav-link">
-            <i class="nav-icon fas fa-paper-plane orange"></i>
-            <p>
-              Sent
-            </p>
-          </router-link>
-        </li>
-        <li class="nav-item">
-          <router-link to="/requests/recieved" class="nav-link">
-            <i class="nav-icon fas fa-inbox green"></i>
-            <p>
-              Recieved
-            </p>
-          </router-link>
-        </li>
-      </ul>
+      </router-link>
     </li>
-    
+    @endcan
+    @can('isFournisseur')
+    <li class="nav-item">
+      <router-link to="/fournisseur/services" class="nav-link">
+        <i class="nav-icon fas fa-user green"></i>
+        <p>
+          My Services
+        </p>
+      </router-link>
+    </li>
+    <li class="nav-item">
+      <router-link to="/requests/recieved" class="nav-link">
+        <i class="nav-icon fas fa-inbox green"></i>
+        <p>
+          Recieved Requests
+          <span id="pendingRequests" class="badge badge-success right" ></span>
+        </p>
+      </router-link>
+    </li>
+    @endcan
 
-
-    @endif
-
-
-
-
-
-    @if(Auth::user()->isAdmin())
+    @can('isAdmin')
     <li class="nav-item has-treeview">
       <a href="#" class="nav-link">
         <i class="nav-icon fas fa-cog green"></i>
@@ -141,7 +111,7 @@
       </ul>
     </li>
 
-    @endif
+    @endcan
 
 
 
@@ -159,3 +129,4 @@
     </li>
   </ul>
 </nav>
+

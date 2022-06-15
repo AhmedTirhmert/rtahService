@@ -462,7 +462,7 @@ export default {
                 },
                 rating: "",
                 message: "",
-                id:''
+                id: "",
             }),
         };
     },
@@ -522,6 +522,35 @@ export default {
                         "warning"
                     );
                 });
+        },
+        cancelServiceRequest(request) {
+            this.feedBackForm.fill(request);
+            Swal.fire({
+                title: "Cancel Request!",
+                html: `Cancel Request for Service <br><b>${request.service.product.name}</b> from <b>${request.client.name}</b> <br>for <b>${request.service.product.price}<i>&#36;</i></b>`,
+                showCancelButton: true,
+                confirmButtonColor: "#e85d04",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Yes, Cancel it!",
+            }).then((result) => {
+                if (result.value) {
+                    this.feedBackForm
+                        .delete(
+                            `/api/serviceRequest/${this.feedBackForm.id}`
+                        )
+                        .then(() => {
+                            Swal.fire(
+                                "Canceled!",
+                                `Request canceled successfully`,
+                                "success"
+                            );
+                            this.loadServiceRequests();
+                        })
+                        .catch((data) => {
+                            Swal.fire("Failed!", data.message, "warning");
+                        });
+                }
+            });
         },
     },
     mounted() {},

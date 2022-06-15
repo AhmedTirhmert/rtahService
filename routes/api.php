@@ -48,6 +48,7 @@ Route::namespace('App\\Http\\Controllers\\API\V1')->group(function () {
     Route::apiResources([
         'user' => 'UserController',
         'product' => 'ProductController',
+        'role' => 'RoleController',
         'service' => 'ServiceController',
         'serviceRequest' => 'ServiceRequestController',
         'feedback' => 'FeedbackController',

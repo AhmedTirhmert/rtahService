@@ -34,7 +34,7 @@
                             <th>User</th>
                             <th>Email</th>
                             <th>Rating</th>
-                            <th>Message</th>
+                            <th>Review</th> 
                         </thead>
                         <tbody>
                             <tr

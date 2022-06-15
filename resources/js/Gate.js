@@ -5,15 +5,18 @@ export default class Gate{
     }
 
     isAdmin(){
-        return this.user.type.toLowerCase() === 'admin';
+        return this.user.role.name.toLowerCase() === 'admin';
     }
 
-    isUser(){
-        return this.user.type.toLowerCase() === 'user';
+    isClient(){
+        return this.user.role.name.toLowerCase() === 'client';
+    }
+    isFournisseur(){
+        return this.user.role.name.toLowerCase() === 'fournisseur';
     }
     
     isAdminOrUser(){
-        if(this.user.type === 'user' || this.user.type === 'admin'){
+        if(this.user.role.name.toLowerCase() === 'user' || this.user.role.name.toLowerCase() === 'admin'){
             return true;
         }
     }
