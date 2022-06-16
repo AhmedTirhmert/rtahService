@@ -50,6 +50,8 @@ A very simple Laravel 8 + Vue 2 + AdminLTE 3 based Curd Starter template for SPA
 - `npm install`
 - `npm run dev`
 - `php artisan serve`
+- `php artisan migrate --path=database/migrations/2019_12_09_044534_create_roles_table.php`
+- `php artisan migrate --seed`
 
 ## Install with Docker
 
