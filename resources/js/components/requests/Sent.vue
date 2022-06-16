@@ -9,6 +9,7 @@
                         </div>
                     </div>
                 </div>
+                <!-- PENDING REQUESTS -->
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
@@ -106,6 +107,7 @@
                     </div>
                     <!-- /.card -->
                 </div>
+                <!-- SENT REQUESTS -->
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
@@ -195,6 +197,19 @@
                                                     class="fas fa-comment-dots blue"
                                                 ></i>
                                             </a>
+                                            <a
+                                                title="Submit a Complain"
+                                                href="#"
+                                                @click="
+                                                    makeComplaint(
+                                                        serviceRequest
+                                                    )
+                                                "
+                                            >
+                                                <i
+                                                    class="fas fa-comment-slash red"
+                                                ></i>
+                                            </a>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -210,6 +225,7 @@
                     </div>
                     <!-- /.card -->
                 </div>
+                <!-- RECIEVED REQUESTS -->
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
@@ -293,7 +309,139 @@
                     </div>
                     <!-- /.card -->
                 </div>
-                <!-- MODAL -->
+                <!-- Complain MODAL -->
+                <div
+                    class="modal fade"
+                    id="complainModal"
+                    tabindex="-1"
+                    role="dialog"
+                    aria-labelledby="complainModal"
+                    aria-hidden="true"
+                >
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Complains</h5>
+                                <button
+                                    type="button"
+                                    class="close"
+                                    data-dismiss="modal"
+                                    aria-label="Close"
+                                >
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+
+                            <form @submit.prevent="submitComplain()">
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label>Request N°</label>
+                                                <input
+                                                    readonly
+                                                    v-model="feedBackForm.id"
+                                                    type="text"
+                                                    class="form-control"
+                                                />
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label>Fournisseur</label>
+                                                <input
+                                                    readonly
+                                                    v-model="
+                                                        feedBackForm.service
+                                                            .user.name
+                                                    "
+                                                    type="text"
+                                                    class="form-control"
+                                                />
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Price</label>
+                                                <input
+                                                    readonly
+                                                    v-model="
+                                                        feedBackForm.service
+                                                            .product.price
+                                                    "
+                                                    type="text"
+                                                    class="form-control"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label>Service</label>
+                                                <input
+                                                    readonly
+                                                    v-model="
+                                                        feedBackForm.service
+                                                            .product.name
+                                                    "
+                                                    type="text"
+                                                    class="form-control"
+                                                />
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Email</label>
+                                                <input
+                                                    readonly
+                                                    v-model="
+                                                        feedBackForm.service
+                                                            .user.email
+                                                    "
+                                                    type="text"
+                                                    class="form-control"
+                                                />
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Experience</label>
+                                                <input
+                                                    readonly
+                                                    v-model="
+                                                        feedBackForm.service
+                                                            .years
+                                                    "
+                                                    type="text"
+                                                    class="form-control"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-12">
+                                            <label>Complain message</label>
+                                            <textarea
+                                                required
+                                                v-model="feedBackForm.message"
+                                                type="text"
+                                                class="form-control"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button
+                                        type="button"
+                                        class="btn btn-secondary"
+                                        data-dismiss="modal"
+                                    >
+                                        Close
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        class="btn btn-success"
+                                    >
+                                        Submit Complain
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- FeedBack MODAL -->
                 <div
                     class="modal fade"
                     id="feedbackModal"
@@ -305,7 +453,10 @@
                     <div class="modal-dialog modal-lg" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">Feedback & Rating</h5>
+                                <h5 class="modal-title">
+                                    Feedback & Rating for request N°
+                                    {{ feedBackForm.id }}
+                                </h5>
                                 <button
                                     type="button"
                                     class="close"
@@ -499,11 +650,13 @@ export default {
         },
         giveFeedback(request) {
             this.feedBackForm.fill(request);
-            console.log(this.feedBackForm);
             $("#feedbackModal").modal("show");
         },
+        makeComplaint(request) {
+            this.feedBackForm.fill(request);
+            $("#complainModal").modal("show");
+        },
         submitFeedback() {
-            console.log(this.feedBackForm);
             this.feedBackForm
                 .post(`/api/feedback`)
                 .then(() => {
@@ -513,6 +666,26 @@ export default {
                         "success"
                     );
                     $("#feedbackModal").modal("hide");
+                    this.loadServiceRequests();
+                })
+                .catch((error) => {
+                    Swal.fire(
+                        "Failed!",
+                        error.response.data.message,
+                        "warning"
+                    );
+                });
+        },
+        submitComplain() {
+            this.feedBackForm
+                .post(`/api/complain`)
+                .then(() => {
+                    Swal.fire(
+                        "Complain Sent!",
+                        `Complain sent successfully`,
+                        "success"
+                    );
+                    $("#complainModal").modal("hide");
                     this.loadServiceRequests();
                 })
                 .catch((error) => {
@@ -535,9 +708,7 @@ export default {
             }).then((result) => {
                 if (result.value) {
                     this.feedBackForm
-                        .delete(
-                            `/api/serviceRequest/${this.feedBackForm.id}`
-                        )
+                        .delete(`/api/serviceRequest/${this.feedBackForm.id}`)
                         .then(() => {
                             Swal.fire(
                                 "Canceled!",

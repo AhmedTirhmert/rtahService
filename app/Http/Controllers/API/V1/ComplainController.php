@@ -2,27 +2,25 @@
 
 namespace App\Http\Controllers\API\V1;
 
-use App\Models\feedback;
-use App\Http\Requests\Feedbacks\FeedbackRequest;
+use App\Models\Complain;
+use App\Http\Requests\Complains\ComplainRequest;
 use Illuminate\Support\Facades\Auth;
 
-class FeedbackController extends BaseController
+class ComplainController extends BaseController
 {
 
-    
-    protected $feedback = '';
+    protected $complain = '';
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct(feedback $feedback)
+    public function __construct(Complain $complain)
     {
         $this->middleware('auth:api');
-        $this->feedback = $feedback;
+        $this->complain = $complain;
     }
-    
     /**
      * Display a listing of the resource.
      *
@@ -46,35 +44,31 @@ class FeedbackController extends BaseController
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\FeedbackRequest  $request
+     * @param  \App\Http\Requests\ComplainRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(FeedbackRequest $request)
+    public function store(ComplainRequest $request)
     {
-        $feedback = $this->feedback->where('user_id',Auth::user()->id)->where('service_id' , $request->get('service_id'))->where('service_request_id' , $request->get('id'))->count();
-        if(!$feedback){
-            $feedback = $this->feedback->create([
-                'service_id' => $request->get('service_id'),
+        $complain = $this->complain->where('user_id',Auth::user()->id)->where('service_request_id' , $request->get('id'))->count();
+        if(!$complain){
+            $complain = $this->complain->create([
                 'service_request_id' => $request->get('id'),
                 'user_id' => Auth::user()->id,
-                'rating' => $request->get('rating'),
                 'message' => $request->get('message'),
             ]);
-            return $this->sendResponse($feedback, 'FeedBack inserted Successfully');
+            return $this->sendResponse($complain, 'Compaint inserted Successfully');
         }else{
-            return $this->sendError('You already sent FeedBack for this request');
+            return $this->sendError('You already sent a Complaint for this request');
         }
-
-
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\feedback  $feedback
+     * @param  \App\Models\Complains  $complains
      * @return \Illuminate\Http\Response
      */
-    public function show(FeedbackRequest $feedback)
+    public function show(Complains $complains)
     {
         //
     }
@@ -82,10 +76,10 @@ class FeedbackController extends BaseController
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\feedback  $feedback
+     * @param  \App\Models\Complains  $complains
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Complain $complains)
     {
         //
     }
@@ -93,11 +87,11 @@ class FeedbackController extends BaseController
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdatefeedbackRequest  $request
-     * @param  \App\Models\feedback  $feedback
+     * @param  \App\Http\Requests\ComplainRequest  $request
+     * @param  \App\Models\Complains  $complains
      * @return \Illuminate\Http\Response
      */
-    public function update(FeedbackRequest $request, $id)
+    public function update(ComplainRequest $request, Complain $complains)
     {
         //
     }
@@ -105,10 +99,10 @@ class FeedbackController extends BaseController
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\feedback  $feedback
+     * @param  \App\Models\Complains  $complains
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Complain $complains)
     {
         //
     }

@@ -30,9 +30,15 @@
                                         <th>Category</th>
                                         <th>Price</th>
                                         <th>Experience</th>
+                                        <th v-show="$gate.isAdmin()">
+                                            Requests
+                                        </th>
                                         <th>Average Rating</th>
                                         <th v-show="$gate.isAdmin()">
                                             Feedbacks
+                                        </th>
+                                        <th v-show="$gate.isAdmin()">
+                                            Complains
                                         </th>
                                         <th>Action</th>
                                     </tr>
@@ -58,36 +64,66 @@
                                         </td>
                                         <td>{{ service.product.price }}</td>
                                         <td>{{ service.years }}</td>
+                                        <td v-show="$gate.isAdmin()">
+                                            {{ service.request.length }}
+                                        </td>
                                         <td>
                                             <star-rating
                                                 :star-size="20"
                                                 read-only
                                                 :show-rating="false"
                                                 :rating="
-                                                    service.feedback
+                                                    service.request
                                                         | AVG_FeedBack()
                                                 "
                                                 :active-color="
-                                                    service.feedback
+                                                    service.request
                                                         | FeedBackColor()
                                                 "
                                             />
                                             <small
                                                 >{{
-                                                    service.feedback.length
+                                                    service.request
+                                                        | FeedBackCount()
                                                 }}
                                                 reviews</small
                                             >
                                         </td>
                                         <td v-show="$gate.isAdmin()">
                                             <a
-                                                title="feedback"
+                                                title="Feedback"
                                                 href="#"
                                                 @click="feedBackModal(service)"
                                             >
                                                 <i
                                                     class="fa fa-comment-dots"
                                                 ></i>
+                                                <small
+                                                    >{{
+                                                        service.request
+                                                            | FeedBackCount()
+                                                    }}
+                                                    Feedbacks</small
+                                                >
+                                            </a>
+                                        </td>
+                                        <td v-show="$gate.isAdmin()">
+                                            <a
+                                                title="Complains"
+                                                href="#"
+                                                @click="complainsModal(service)"
+                                                class="orange"
+                                            >
+                                                <i
+                                                    class="fas fa-comment-slash orange"
+                                                ></i>
+                                                <small
+                                                    >{{
+                                                        service.request
+                                                            | ComplainsCount()
+                                                    }}
+                                                    Complains</small
+                                                >
                                             </a>
                                         </td>
                                         <td>
@@ -126,17 +162,17 @@
                 </div>
             </div>
         </div>
-        <feed-back-modal :service="feedBackService"/>
+        <complains-modal :service="serviceComplains" />
+        <feed-back-modal :service="feedBackService" />
     </section>
 </template>
 
 <script>
-import StarRating from "vue-star-rating";
-import feedBackModal from "./feedbackModal.vue";
 export default {
     components: {
-        StarRating,
-        feedBackModal,
+        StarRating  : () => import('vue-star-rating'),
+        feedBackModal : () => import('./feedbackModal.vue'),
+        complainsModal : () => import('./complainsModal.vue'),
     },
     data() {
         return {
@@ -156,7 +192,8 @@ export default {
                 service_id: "",
             }),
             categories: [],
-            feedBackService: { product: { name: "" }, feedback: [] },
+            feedBackService: { product: { name: "" }, feedback: [],complains: [] },
+            serviceComplains: { product: { name: "" },complains: [] },
         };
     },
     methods: {
@@ -206,8 +243,19 @@ export default {
             $("#addNew").modal("show");
         },
         feedBackModal(service) {
-            this.feedBackService = service;
+            let feedBacks = service.request
+                .filter((elem) => elem.feedback[0])
+                .map((elem) => elem.feedback[0]);
+            this.feedBackService = { ...service, feedback: feedBacks };
+            console.log(this.feedBackService);
             $("#feedBackModal").modal("show");
+        },
+        complainsModal(service) {
+            let complains = service.request
+                .filter((elem) => elem.complain[0])
+                .map((elem) => elem.complain[0]);
+            this.serviceComplains = { ...service, complains: complains };
+            $("#complainsModal").modal("show");
         },
         createService() {
             this.$Progress.start();
@@ -334,17 +382,29 @@ export default {
         truncate: function (text, length, suffix) {
             return text.substring(0, length) + suffix;
         },
-        AVG_FeedBack(feedback) {
+        AVG_FeedBack(service) {
+            let feedBacks = service.filter((elem) => elem.feedback[0]);
             let rating =
-                feedback.map((elem) => elem.rating).reduce((a, b) => a + b, 0) /
-                feedback.length;
+                feedBacks
+                    .map((elem) => elem.feedback[0].rating)
+                    .reduce((a, b) => a + b, 0) / feedBacks.length;
             return rating;
         },
-        FeedBackColor(feedback) {
+        FeedBackColor(serviceRequests) {
+            let feedBacks = serviceRequests.filter((elem) => elem.feedback[0]);
             let rating =
-                feedback.map((elem) => elem.rating).reduce((a, b) => a + b, 0) /
-                feedback.length;
+                feedBacks
+                    .map((elem) => elem.feedback[0].rating)
+                    .reduce((a, b) => a + b, 0) / feedBacks.length;
             return rating > 3 ? "#02c39a" : "#ff3c38";
+        },
+        FeedBackCount(serviceRequests) {
+            let feedBacks = serviceRequests.filter((elem) => elem.feedback[0]);
+            return feedBacks.length;
+        },
+        ComplainsCount(serviceRequests) {
+            let complains = serviceRequests.filter((elem) => elem.complain[0]);
+            return complains.length;
         },
     },
     computed: {

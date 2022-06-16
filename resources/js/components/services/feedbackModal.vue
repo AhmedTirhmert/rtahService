@@ -28,21 +28,21 @@
                 <div class="modal-body">
                     <table
                         class="table table-stripped table-bordered"
-                        v-if="service.feedback.length > 0"
+                        v-if="service.feedback.length  > 0"
                     >
                         <thead>
                             <th>User</th>
                             <th>Email</th>
                             <th>Rating</th>
-                            <th>Review</th> 
+                            <th>Review</th>
                         </thead>
                         <tbody>
                             <tr
                                 v-for="feedback in service.feedback"
                                 :key="feedback.id"
                             >
-                                <td>{{ feedback.user.name }}</td>
-                                <td>{{ feedback.user.email }}</td>
+                                <td>{{ feedback.client.name }}</td>
+                                <td>{{ feedback.client.email }}</td>
                                 <td>
                                     <star-rating
                                         :star-size="20"
@@ -73,8 +73,6 @@ export default {
     components: {
         StarRating,
     },
-    props: {
-        service: Object,
-    },
+    props: ['service'],
 };
 </script>

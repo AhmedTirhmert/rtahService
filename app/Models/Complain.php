@@ -5,32 +5,25 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-use App\Models\Service;
 use App\Models\User;
 use App\Models\ServiceRequest;
 
-class feedback extends Model
+class Complain extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'user_id',
-        'service_id',
         'service_request_id',
         'message',
-        'rating',
     ];
 
-    public function service()
-    {
-        return $this->belongsTo(Service::class);
-    }
     public function client()
     {
         return $this->belongsTo(User::class,'user_id');
     }
     public function serviceRequest()
     {
-        return $this->belongsTo(ServiceRequest::class,'service_request_id');
+        return $this->belongsTo(ServiceRequest::class);
     }
 }

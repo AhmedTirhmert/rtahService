@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Product;
 use App\Models\User;
-use App\Models\feedback;
 use App\Models\ServiceRequest;
 class Service extends Model
 {
@@ -30,10 +29,6 @@ class Service extends Model
     public function request()
     {
         return $this->hasMany(ServiceRequest::class);
-    }
-    public function feedback()
-    {
-        return $this->hasMany(feedback::class);
     }
 
 }
