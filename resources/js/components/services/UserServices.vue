@@ -60,17 +60,18 @@
                                                 :show-rating="false"
                                                 :increment="0.5"
                                                 :rating="
-                                                    service.feedback
+                                                    service.request
                                                         | AVG_FeedBack()
                                                 "
                                                 :active-color="
-                                                    service.feedback
+                                                    service.request
                                                         | FeedBackColor()
                                                 "
                                             />
                                             <small
                                                 >{{
-                                                    service.feedback.length
+                                                    service.request
+                                                        | FeedBackCount()
                                                 }}
                                                 reviews</small
                                             >
@@ -476,6 +477,10 @@ export default {
                 feedback.map((elem) => elem.rating).reduce((a, b) => a + b, 0) /
                 feedback.length;
             return rating > 3 ? "#02c39a" : "#ff3c38";
+        },
+        FeedBackCount(serviceRequests) {
+            let feedBacks = serviceRequests.filter((elem) => elem.feedback[0]);
+            return feedBacks.length;
         },
     },
     computed: {
